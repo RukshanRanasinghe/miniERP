@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./assets/htmlstyles.css" rel="stylesheet" />
+    <script type="text/JavaScript" src="../assets/methods.js"></script>
+    <title>View Invoice Records</title>
+    <script>
+        try {
+            var stocksJSON = "{{.Stocks}}";
+            var PurchasesJSON = "{{.Purchases}}"
+            var InvoicesJSON = "{{.Invoices}}"
+            var stocks = JSON.parse(stocksJSON);
+            var purchases = JSON.parse(PurchasesJSON);
+            var invoices = JSON.parse(InvoicesJSON);
+        } catch (err) {
+            
+        } 
+    </script>
+</head>
+<body>
+    <h3 class="heading">Status Report</h3>
+    <form enctype='application/json' action="/submitInvoiceData" method="POST" class="form-style">
+        <table class="table-style">
+            <tbody>
+                <tr>
+                    <td>Start date:</td>
+                    <td><input type="date" id="startDate"></td>
+                    <td>End date:</td>
+                    <td><input type="date" id="endDate"></td>
+                    <td><button onclick="return EnterDate()">submit</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="hidden" name="stateDate" id="SDate">
+        <input type="hidden" name="endDate" id="EDate">
+    </form>
+    
+    <div id="tableStocks" class="sub-heading">
+            <h2>Current Inventory</h2>
+            <hr>
+            <table class="table-style ">
+                <thead id="inventoryHeader"></thead>
+                <tbody>
+                    <script>
+                        var totalValueOfInventory = 0, valueOfEachItemInInventory, quantity;
+                        try {
+                            for (let items = 0; items < stocks.length; items++) {
+                                valueOfEachItemInInventory = parseFloat(stocks[items]["purchasedprice"]).toFixed(2);
+                                quantity = parseFloat(stocks[items]["quantity"]);
+                                document.writeln(`<tr><td>` + stocks[items]["itemname"] +
+                                    `</td><td style="width: 50px;text-align: center;">` +
+                                    stocks[items]["quantity"] + `</td><td style="width: 50px;text-align: right;">` +
+                                    stocks[items]["units"] + `</td><td style="width: 50px;text-align: right;">` + valueOfEachItemInInventory + `</td></tr>`);
+                                totalValueOfInventory += parseFloat(valueOfEachItemInInventory) * quantity;
+                            }
+                        } catch (err) {
+                        }
+                    </script>
+                    <tr id="inventoryFooter"></tr>
+                    <tr>
+                        <td colspan="3">Total value of the inventory items Rs.</td>
+                        <td style="text-align: right;"><script>document.writeln(totalValueOfInventory.toFixed(2))</script></td>
+                    </tr>
+                </tbody>
+            </table>
+        <p id="inventory"></p>
+        <h2>Purchased During the Given Period</h2>
+        <hr>
+        <table class="table-style">
+            <thead id="purchasedHeader"></thead>
+            <tbody >
+                <script>
+                    var totalValueOfInvoice, quantity;
+
+                    for(var item in purchases){
+            
+                        totalValueOfInvoice = parseFloat(purchases[item]["purchased_price"]);
+                        quantity = parseFloat(purchases[item]["quantity"]);
+
+                        totalValueOfInvoice += totalValueOfInvoice * quantity;
+                        document.writeln(`<tr><td>` + purchases[item]["item_name"] +
+                            `</td><td style="width: 50px;text-align: center;">` +
+                            purchases[item]["quantity"] + `</td><td style="width: 50px;text-align: right;">` +
+                            purchases[item]["units"] + `</td><td style="width: 50px;text-align: right;">` +  purchases[item]["purchased_price"] + `</td></tr>`);
+                    }
+                </script>
+                <tr id="purchasedFooter"></tr>
+                <tr>
+                    <td colspan="3">Total value of Invoices Rs.</td>
+                    <td style="text-align: right;"><script>document.writeln(totalValueOfInvoice)</script></td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>Invoices</h2>
+        <hr>
+        <table class="table-style ">
+            <thead id="invoiceHeader"></thead>
+            <tbody>
+                <script>
+                    var revenueForThePeriod = 0;
+                    for (data in invoices) {
+                        document.writeln(`<tr><td>` + invoices[data]["item_name"] +
+                            `</td><td style="width: 50px;text-align: center;">` +
+                            invoices[data]["quantity"] + `</td><td style="width: 50px;text-align: right;">` +
+                           invoices[data]["units"] + `</td><td style="width: 50px;text-align: right;">` + invoices[data]["purchased_price"].toFixed(2)+ `</td></tr>`);
+                        revenueForThePeriod = revenueForThePeriod + invoices[data]["purchased_price"];
+                    }
+                </script>
+                
+                <tr id="invoiceFooter"></tr>
+                <tr>
+                    <td colspan="3">Total revenue for the period Rs.</td>
+                    <td style="text-align: right;">
+                        <script>document.writeln(revenueForThePeriod.toFixed(2))</script>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script language="javascript" type="text/javascript">
+        var startDate, endDate;
+        var validDate = false;
+        var inventoryH = document.getElementById("inventoryHeader");
+        var inventoryF = document.getElementById("inventoryFooter")
+        var purchasedH = document.getElementById("purchasedHeader");
+        var purchasedF = document.getElementById("purchasedFooter");
+        var invoiceH = document.getElementById("invoiceHeader");
+        var invoiceF = document.getElementById("invoiceFooter")
+        var headerText = `<tr>
+                                <th style = "width: 140px;border-bottom: 1pt solid black;" > Items</th>
+                                <th style="width: 50px;text-align: center; border-bottom: 1pt solid black;">Quantity</th>
+                                <th style="width: 50px; text-align:right; border-bottom: 1pt solid black;">Units</th>
+                                <th style="width: 50px; text-align:right; border-bottom: 1pt solid black;">Value</th>
+                            </tr >`;
+        var footerText = `<td style="border-bottom: 1pt solid black;"></td>
+                            <td style="border-bottom: 1pt solid black;"></td>
+                            <td style="border-bottom: 1pt solid black;"></td>
+                            <td style="border-bottom: 1pt solid black;"></td>`;
+        
+        inventoryH.innerHTML = headerText;
+        inventoryF.innerHTML = footerText;
+        purchasedH.innerHTML = headerText;
+        purchasedF.innerHTML = footerText;
+        invoiceH.innerHTML = headerText;
+        invoiceF.innerHTML = footerText;
+        
+        function EnterDate() {
+            startDate = document.getElementById("startDate").value;
+            endDate = document.getElementById("endDate").value;
+            validDate = startDate < endDate;
+            if (!validDate) {
+                alert("Invalid date selection")
+                return validDate;
+            }
+            document.getElementById("SDate").value = startDate;
+            document.getElementById("EDate").value = endDate;
+            return validDate;
+        }
+    </script>
+</body>
+</html>

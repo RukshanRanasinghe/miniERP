@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./assets/htmlstyles.css" rel="stylesheet" />
+    <title>Document</title>
+</head>
+<body>
+    <h3 class="heading">Edit Customer Group</h3>
+    <h4 class="sub-heading">Registered Customer Group</h4>
+    <table class="table-style">
+        <tr><th>ID</th><th>Customer Group</th><th>Price Level</th><th>Status</th></tr>
+        <script type="text/JavaScript">
+            var customers = "{{.}}";
+            var customerData = JSON.parse(customers);
+            var customerSetLength = customerData.length;
+            for (let index = 0; index < customerSetLength; index++) {
+                    document.writeln("<tr><td>"+
+                        customerData[index]["id"]+"</td><td>"+ 
+                        customerData[index]["category"]+"</td><td>"+
+                        customerData[index]["priceLevel"]+"</td><td>"+
+                        customerData[index]["status"]+"</td></tr>")
+                    }
+        </script>
+    </table>
+    <form class="form-style" name="frmAmendCstData" action="/confirmEditCustomerGroup" enctype='application/json' method="POST" onsubmit="return validateForm()" required>
+        <p>
+        <label for="cst">Customer Group</label>
+        <select name="CstGroup" id="cst">
+            <option value="NA">Select</option>
+            <script>
+                for (let count = 0; count <= customerSetLength; count++) {
+                    document.write("<option value=" + customerData[count]["id"] + ">" + customerData[count]["category"] + "</option>");
+                }
+            </script>
+        </select>
+        <label for="cstNewGroun">Amend Customer Group</label>
+        <input type="text" id="cstNewGroun" name="customerGroup">
+        </p>
+        <p>
+        <label for="pl">Price Level</label>
+        <input type="number" name="PriceLevel" id="pl" min="1" max="100" required>
+        <input type="radio" name="Status" id="actStatus" value="active">Active
+        <input type="radio" name="Status" id="inaStatus" value="inactive">Inactive
+        </p>
+        <br><br>
+        <input type="submit" value="Submit">
+    </form>
+    <script>
+        function validateForm() {
+                var CstSelection = document.forms["frmAmendCstData"]["CstGroup"].value;
+                var AmdCstGroup = document.forms["frmAmendCstData"]["customerGroup"].value;
+                var Status = document.forms["frmAmendCstData"]["Status"].value;
+                if (CstSelection == "NA") {
+                    alert("Need to select a Customer Group");
+                    return false;
+                }
+                if (AmdCstGroup == "") {
+                    alert("Key in Amend Customer Group");
+                    return false;
+                }
+                if (Status == "") {
+                    alert("Need to select the status");
+                    return false;
+                }
+            }
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./assets/htmlstyles.css" rel="stylesheet" />
+    <title>Document</title>
+</head>
+<body>
+    <h3 class="heading">Add a Supplier</h3>
+    <form enctype='application/json' action="/confirmsuppler" method="POST" class="form-style">
+        <table>
+            <tr>
+                <td><label for="crdate">Create Date</label></td>
+                <td><input type="date" id="crdate" name="supplierCrtDate"></td>
+                <td><label for="telnum">Tel Num.</label></td>
+                <td><input type="tel" placeholder="0123456789" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" id="telnum" name="telNumber"></td>
+            </tr>    
+            <tr>
+                <td><label for="salutation">Salutation</label></td>
+                <td><select name="selection" id="salutation">
+                        <option value="None">Select</option>
+                        <option value="Mr.">Mr</option>
+                        <option value="Mrs.">Mrs</option>
+                        <option value="Miss.">Miss</option>
+                        <option value="Miss.">Ms</option>
+                    </select>
+                </td>
+                <td><label for="firstname">First Name</label></td>
+                <td><input type="text" id="firstname" name="firstName"></td>
+                <td><label for="lastname">Last Name</label></td>
+                <td><input type="text" id="lastname" name="lastName"></td>
+            </tr>
+            <tr>
+                <td><label for="org">Organization</label></td>
+                <td><input type="text" id="org" name="organization"></td>
+            </tr>
+            <tr>
+                <td><label for="add">Address</label><br></td>
+                <td colspan="2"><textarea name="longAddress" id="add" cols="30" rows="5"></textarea></td>
+            </tr>
+        </table>
+        <input type="submit" value="Submit"><br>
+    </form>
+</body>
+</html>

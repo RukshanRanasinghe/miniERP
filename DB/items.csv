@@ -1,0 +1,8 @@
+id,date,item_name,item_description,item_code,purchase_price,selling_price,units,id_supplier,VATRegistered,status
+1,"2022-10-19 00:00:00","Keeri Samba Rice ","Araliya Keeri Samba Rice 1Kg (5U)",GR001,160.42,260.00,Kg,1,yes,active
+2,"2022-10-19 00:00:00","Red Kekulu","Rice Red Kekulu Bulk Kg - Local",GR002,95.00,210.00,Kg,1,no,active
+3,"2022-10-19 00:00:00",Carrot,Carrot,VC001,430.20,570.00,Kg,2,yes,inactive
+4,"2022-10-19 00:00:00",Pumpkin,Pumpkin,VP002,104.89,260.00,Kg,2,no,active
+5,"2022-10-19 00:00:00",Beetroot,"Up country Beetroot",VB003,204.89,330.00,Kg,2,no,active
+6,"2022-10-19 00:00:00",Carrot,Carrot,VC001,430.20,565.00,Kg,2,yes,inactive
+7,"2022-10-19 00:00:00",Carrot,Carrot,VC001,420.20,565.00,Kg,2,yes,active

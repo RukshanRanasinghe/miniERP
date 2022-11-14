@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./assets/htmlstyles.css" rel="stylesheet" />
+    <script type="text/JavaScript" src="../assets/methods.js"></script>
+    <title>Purchasing</title>
+</head>
+<body>
+    <h3 class="heading">Purchasing Items</h3>
+    <script>
+        var items = "{{.}}";
+        var itemList = JSON.parse(items);
+        var totalItems = itemList.length;
+    </script>
+    <form class="form-style" action="/addToInventory" method="POST" enctype='application/json'>
+        <table>
+            <tr>
+                <td><label for="date">Date </label></td>
+                <td><input type="date" name="purchaseDate" id="date"></td>
+            </tr>
+            <tr>
+                <td><label for="pi">Item</label></td>
+                <td>
+                    <select name="purchaseItem" id="purchasedItem" onchange="selectFill()">
+                        <option value="">Select</option>
+                        <script>
+                            for (rec = 0; rec < totalItems; rec++) {
+                                if (itemList[rec]["status"] == "active") {
+                                    document.write("<option value=" + itemList[rec]["id"] + ">" + itemList[rec]["itemname"] + "</option>")
+                                }
+                            }  
+                        </script>
+                    </select>
+                </td>
+                <td><label for="value">Cost Rs.</label></td>
+                <td><input type="number" id="value" name="value" readonly="readonly" class="lockInput"></td>
+                <td><label for="quantity"></label>Purchasing Qty</td>
+                <td><input type="number" class="userInput" name="purchaseQuantity"><input type="text" class="lockInput" id="units" name="units"></td>
+            </tr>
+            <tr>
+                <td><input type="submit"></td>
+            </tr>
+        </table>
+        <input type="hidden" name="itemCode" id="itemcode">
+        <input type="hidden" name="description" id="discript">
+        <input type="hidden" name="itemName" id="itemname">
+        <input type="hidden" name="sellingPrice" id="sellingPrice">
+    </form>
+
+    <script type='text/javascript'>
+        document.getElementById("date").value = toDate();
+        function selectFill() {
+            selectedItem = document.getElementById("purchasedItem").value;
+            for (rec = 0; rec <= totalItems; rec ++) {
+                if (selectedItem == itemList[rec]["id"]) {
+                    document.getElementById("value").value = itemList[rec]["purchasedprice"];
+                    document.getElementById("units").value = itemList[rec]["units"];
+                    document.getElementById("itemcode").value = itemList[rec]["itemcode"];
+                    document.getElementById("discript").value = itemList[rec]["itemdescription"];
+                    document.getElementById("itemname").value = itemList[rec]["itemname"];
+                    document.getElementById("sellingPrice").value = itemList[rec]["sellingprice"];
+                }
+            } 
+        }
+    </script>
+</body>
+</html>

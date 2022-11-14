@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./assets/htmlstyles.css" rel="stylesheet" />
+    <title>Document</title>
+</head>
+<body>
+    <h3 class="heading">Edit Supplier Details</h3>   
+    <h4 class="sub-heading">Registered Suppliers List</h4>
+    <table class="table-style">
+        <tr><th>ID</th><th>Date Created</th><th>Contact No</th><th></th><th>First Name</th><th>Last Name</th><th>Organization</th><th>Address</th><th>Status</th></tr>
+        <script type="text/JavaScript">
+            var suppliers = "{{.}}";
+            var supsJSON = JSON.parse(suppliers);
+            var supplierIds = [];
+
+            supDBRaws = supsJSON.length;
+            for (let index = 0; index < supDBRaws; index++) {
+                document.writeln("<tr><td>"+
+                    (index+1)+"</td><td>" +
+                    supsJSON[index]["date"].substr(0, 10) + "</td><td>" +
+                    supsJSON[index]["telnum"]+ "</td><td>" +
+                    supsJSON[index]["salutations"]+ "</td><td>" +
+                    supsJSON[index]["firstname"]+ "</td><td>" +
+                    supsJSON[index]["lastname"]+ "</td><td>" +
+                    supsJSON[index]["organization"]+ "</td><td>" +
+                    supsJSON[index]["address"]+ "</td><td>" +
+                    supsJSON[index]["status"]+ "</td></tr>")
+                    supplierIds.push((index+1));
+            }
+        </script>
+    </table>
+    <form enctype='application/json' method="POST" class="form-style">
+        <label for="selectSup"> Select ID</label>
+        <input type="number" name="supSelected" id="selectSup" placeholder="Suppler ID">
+        <button type="button" onclick="filterSupplier()">Select</button>
+    </form>
+    <br>
+    <form enctype='application/json' action="/confirmAlter" method="POST" class="form-style">
+        <table class="table-style">
+            <tr>
+                <td><input type="hidden" name="id" id="id"></td>
+            </tr>
+            <tr>
+                <td><label for="crdate">Create Date</label></td>
+                <td><input type="date" id="crdate" name="supplierCrtDate"></td>
+                <td><label for="telnum">Tel Num.</label></td>
+                <td><input type="tel" placeholder="0123456789" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" id="telnum" name="telNumber"></td>
+            </tr>
+            <tr>
+                <td><label for="salutation">Salutation</label></td>
+                <td><select name="selection" id="salutation">
+                        <option value="None">Select</option>
+                        <option value="Mr.">Mr</option>
+                        <option value="Mrs.">Mrs</option>
+                        <option value="Miss.">Miss</option>
+                        <option value="Ms.">Ms</option>
+                    </select>
+                </td>
+                <td><label for="firstname">First Name</label></td>
+                <td><input type="text" id="firstname" name="firstName"></td>
+                <td><label for="lastname">Last Name</label></td>
+                <td><input type="text" id="lastname" name="lastName"></td>
+            </tr>
+            <tr>
+                <td><label for="org">Organization</label></td>
+                <td><input type="text" id="org" name="organization"></td>
+            </tr>
+            <tr>
+                <td><label for="add">Address</label><br></td>
+                <td colspan="2"><textarea name="longAddress" id="add" cols="30" rows="5"></textarea></td>
+                <td></td>
+                <td><label for="state">Supplier Status</label></td>
+                <td>
+                    <input type="radio" name="Status" id="actStatus" value="active">Active
+                    <input type="radio" name="Status" id="inaStatus" value="inactive">Inactive
+                </td>
+                <td id="state" name="state"></td>
+            </tr>
+        </table>
+
+        <input type="submit" value="Submit"><br>
+    </form>
+            
+    <script>
+        function filterSupplier() {
+            let idSup = Number(document.getElementById("selectSup").value);
+            if ( supplierIds.includes(idSup)) {
+                idSupNum = Number(idSup) - 1;
+                document.getElementById("id").value = supsJSON[idSupNum]["id"];
+                document.getElementById("crdate").value = supsJSON[idSupNum]["date"].substr(0, 10);
+                document.getElementById("telnum").value = supsJSON[idSupNum]["telnum"];
+                document.getElementById("salutation").value = supsJSON[idSupNum]["salutations"];
+                document.getElementById("firstname").value = supsJSON[idSupNum]["firstname"];
+                document.getElementById("lastname").value = supsJSON[idSupNum]["lastname"];
+                document.getElementById("org").value = supsJSON[idSupNum]["organization"];
+                document.getElementById("add").value = supsJSON[idSupNum]["address"];
+                if (supsJSON[idSupNum]["status"] == "active") {
+                    document.getElementById("actStatus").checked = true;
+                    document.getElementById("inaStatus").checked = false;
+                } else {
+                    document.getElementById("actStatus").checked = false;
+                    document.getElementById("inaStatus").checked = true;
+                }
+            } else {
+                alert("Invalid Entry" + " " + idSup)
+            } 
+        }
+    </script>        
+</body>
+</html> 

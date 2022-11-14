@@ -1,0 +1,139 @@
+.side-bar {
+    width: 180px;
+    height: 100%;
+    background-color: rgb(54, 54, 54);
+    z-index: 0;
+    padding-top: 50px;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    position: fixed;
+}
+
+.side-bar a {
+    text-decoration: none;
+    color: rgb(247, 246, 239);
+    padding-left: 10px;
+    line-height: 40px;
+    background-color: rgb(54,54,54);
+}
+
+.transaction {
+    position: relative;
+}
+
+.transaction:hover {
+    color: rgb(88, 181, 69);
+    padding-bottom: 50px;
+}
+
+.transaction-content {
+    display: none;
+    position: absolute;
+    z-index: 5;
+}
+
+.transaction-content a {
+    text-decoration: none;
+    padding-left: 70px;
+    display: block;
+}
+
+.transaction:hover ~ .transaction-content {
+    display: block;
+    color: bisque;
+}
+
+.transaction-content:hover {
+    display: block;
+    background-color: rgb(54,54,54);
+}
+
+.transaction-content a:hover {
+    color: rgb(88, 181, 69);
+}
+
+/*  */
+
+.report {
+    position: relative;
+}
+
+.report:hover {
+    color: rgb(88, 181, 69);
+    padding-bottom: 100px;
+}
+
+.report-content {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    background-color: rgb(181, 215, 189);
+}
+
+.report-content a {
+    text-decoration: none;
+    padding-left: 50px;
+    display: block;
+}
+
+.report:hover ~ .report-content {
+    display: block;
+    color: bisque;
+}
+
+.report-content:hover {
+    display: block;
+}
+
+.report-content a:hover {
+    color: rgb(88, 181, 69);
+}
+
+/*  */
+
+.source-information {
+    position: relative;
+}
+
+.source-information:hover {
+    color: rgb(88, 181, 69);
+    padding-bottom: 100px;
+}
+
+.source-information-content {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    background-color: rgb(181, 215, 189);
+}
+
+.source-information-content a {
+    text-decoration: none;
+    padding-left: 50px;
+    display: block;
+}
+
+.source-information:hover ~ .source-information-content {
+    display: block;
+    color: bisque;
+}
+
+.source-information-content:hover {
+    display: block;
+}
+
+.source-information-content a:hover {
+    color: rgb(88, 181, 69);
+}
+
+.main-page {
+    margin-left: 170px;
+    /* background-color: blue; */
+    height: 800px;
+    width: 90%;
+    text-indent: 30px;
+}
+
+.iframe-style {
+    font-size: 40px;
+}

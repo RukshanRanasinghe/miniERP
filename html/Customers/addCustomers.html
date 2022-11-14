@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./assets/htmlstyles.css" rel="stylesheet" />
+    <title>Add Customer Group</title>
+</head>
+<body>
+    <h3 class="heading">Add New Customer Group</h3>
+    <form class="form-style" enctype='application/json' action="/confirmCustomerGroup" method="POST">
+        <label for="Cat">Category</label>
+        <input type="text" id="Cat" name="Category">
+        <label for="PrLvl">Price Level</label>
+        <input type="number" id="PrLvl" name="PriceLevel" placeholder="Selling Disc %" max="100" min="1">
+        <input type="submit" name="Submit" id="submitNewCustomer">
+    </form>
+</body>
+</html>

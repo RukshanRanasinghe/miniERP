@@ -1,0 +1,5 @@
+id,item_code,item_name,quantity,units,purchase_price,selling_price
+1,GR001,"Keeri Samba Rice ",1620,Kg,160.42,260.00
+2,VC001,Carrot,960,Kg,420.20,565.00
+3,VP002,Pumpkin,1261,Kg,104.89,260.00
+4,GR002,"Red Kekulu",992,Kg,95.00,210.00

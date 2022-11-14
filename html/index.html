@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/assets/indexstyle.css" rel="stylesheet" />
+    <title>Grocery ERP</title>
+</head>
+<body>
+    <div class="side-bar">
+
+        <a href="#" class="transaction">Transactions</a>
+        <div class="transaction-content">
+            <a href="/invoice" target="frame">Invoicing</a>
+            <a href="/procureItems" target="frame">Purchasing</a>
+            <!-- <a href="#">Cash Recipes</a>
+            <a href="#">Payments</a>
+            <a href="#">Other Expenses</a>
+            <a href="#">Other Income</a> -->
+        </div><br>
+
+        <a href="#" class="report">Reports</a>
+        <div class="report-content">
+            <a href="/viewInvoice" target="frame">Status Report</a>
+            <!-- <a href="/viewStockReport" target="frame">Stocks Report</a> -->
+        </div><br>
+
+        <a href="#" class="source-information">Source Data</a>
+        <div class="source-information-content">
+            <a href="/addNewCustomerGroup" target="frame">Add Customer</a>
+            <a href="/editCustomerGroup" target="frame">Edit Customer</a>
+            <a href="./addsuppliers" target="frame">Add Supplier</a>
+            <a href="./altersupplierdetails" target="frame">Edit Supplier</a>
+            <a href="/addNewItem" target="frame">Create Item</a>
+            <a href="/editItem" target="frame">Edit Item</a>
+        </div>
+    </div>
+    <div class="main-page">
+        <iframe name="frame" frameborder="0" width="91%" height="100%" id="iframe"></iframe>
+    </div>
+    <script>
+        var message = '<h1 style="margin-top: 25%;">Welcome to Mom and Pop Store</h1><hr><h3>Designed and Developed by Rukshan Himadri Ranasinghe</h3>';
+        var frame = document.getElementById('iframe').contentWindow.document;
+        frame.open();
+        frame.write(message);
+        frame.close();
+    </script>
+</body>
+</html>

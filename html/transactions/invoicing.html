@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./assets/htmlstyles.css" rel="stylesheet" />
+    <script type="text/JavaScript" src="../assets/methods.js"></script>
+    <title>Invoicing</title>
+</head>
+<body>
+    <h3 class="heading">Customer Invoice</h3>
+   
+    <script type="text/JavaScript">
+        try {
+            var customerJSON = "{{.Customers}}";
+            var customers = JSON.parse(customerJSON);
+            var stocksJSON =  "{{.Stocks}}";
+            var stocks = JSON.parse(stocksJSON);
+            var priceLevel = 100;
+            var countStocks = stocks.length;
+            var countCustomers = customers.length;
+        } catch (err) {
+            
+        } 
+    </script>
+
+    <table class="table-style">
+        <tr>
+            <th>Customer Type</th>
+            <td>
+                <select name="priceLevel" id="priceLevel">
+                    <script type="text/JavaScript">
+                        try {
+                            for (let item = 0; item <= countCustomers; item ++) {
+                                if (customers[item]["status"] == "active") {
+                                    document.write("<option value=" + customers[item]["priceLevel"] + ">" + customers[item]["category"] + "</option>");
+                                }
+                            }
+                        } catch (err) {
+            
+                        } 
+                    </script>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>Item</th><th>Cost Rs.</th><th>In Stock</th><th>Quantity</th>
+        </tr>
+        <tr>
+            <td>
+                <select name="selectItem" id="selectItem" onchange="return selectItem()" tabindex="1">
+                    <option value="NA">Select</option>
+                    <script type="text/JavaScript">
+                        try {
+                            for (let item = 0; item <= countStocks; item ++) {
+                                document.write("<option value=" + stocks[item]["itemcode"] + ">" + stocks[item]["itemname"] + "</option>");
+                            }
+                        } catch (err) {
+            
+                        } 
+                    </script>
+                </select>
+            </td>
+            <td><input type="number" id="sellingPrice" name="sellingPrice" class="lockInput" readonly></td>
+            <td><input type="text" id="InStock" name="InStock" readonly class="lockInput"></td>  
+            <td><input type="number" name="quantity" id="quantity" class="userInput" tabindex="2"></td>   
+            <td><input type="text" id="units" name="units" readonly class="lockInput"></td>  
+            <td><button onclick="addToList()" tabindex="3" id="btn" disabled="true">Add</button></td> 
+        </tr>
+    </table>
+    <br><br>
+    <table class="table-style" id="bill">
+        <tr>
+            <td><label for="invoiceNumber" class="labelSty">Inv No.</label></td>
+            <td><input type="text" id="invoiceNumber" class="lockInput"></td>
+            <td><label for="date" class="labelSty">Date</label></td>
+            <td><input type="text" readonly="readonly" class="lockInput" id="date"></td>
+            <td><label for="total" class="labelSty">Total Rs.</label></td>
+            <td><input type="number" class="lockInput" id="billValue" name="billValue" step="0.01"></td>
+        </tr>
+        <tr>
+            <th>Item Code</th><th>Item Name</th><th>Quantity</th><th>Unit Cost</th><th>Amount</th><th>Sub Total</th>
+        </tr>
+    </table>
+    <!-- Send data to the server -->
+    <form action="/updateInvoice" name="Invoice" method="POST" enctype='application/json'>
+        <input type="hidden" name="balanceStock" id="balanceStock">
+        <input type="hidden" name="invoice" id="invoice">
+        <button tabindex="3" id="submit" disabled="true">Submit</button>
+    </form>
+
+    <script type="text/JavaScript">
+        const invoice = {
+            InvoiceDate: toDate(),
+            InvoiceNumber: invoiceNumber(),
+            ItemCodes: [],
+            ItemNames: [],
+            Quantities: [],
+            ItemUnits: [],
+            ItemSubTotal: [],
+            TotalBillValue: 0.00,
+        }
+
+        var selectedItem, remainingStocks;
+        var countItems = 0;
+
+        var discount = priceLevel/100;
+        document.getElementById("date").value = invoice.InvoiceDate;
+        document.getElementById("invoiceNumber").value = invoice.InvoiceNumber;
+        
+       
+        function addToList() {
+            var recept = document.getElementById("bill");
+            var quantity = parseFloat(document.getElementById("quantity").value);
+            var priceLevel = document.getElementById("priceLevel").value;
+            var discount = priceLevel/100;
+            var sellingPrice =  stocks[selectedItem]["sellingprice"];
+            sellingPrice = sellingPrice * discount;
+            var inventoryStock = stocks[selectedItem]["quantity"];
+            var code = stocks[selectedItem]["itemcode"];
+            var item = stocks[selectedItem]["itemname"];
+            var unit = stocks[selectedItem]["units"];
+            
+            var amount = twoDecimals(sellingPrice * quantity);
+
+            if (quantity <= 0 || isNaN(quantity) || !Number.isInteger(quantity)) {
+                window.alert("The quantity should not be zero, empty or a decimal value");
+                return false;
+            }
+
+            inventoryStock = inventoryStock - quantity;
+            if (inventoryStock < 0) {
+                window.alert("Insufficient Inventory");
+                return false;
+            } else {
+                var raw = recept.insertRow(2);
+                var Code = raw.insertCell(0);
+                var itemName = raw.insertCell(1);
+                var itemQty = raw.insertCell(2);
+                var Units = raw.insertCell(3);
+                var itemCost = raw.insertCell(4);
+                var subtotal = raw.insertCell(5);
+
+                // Create a invoice table on the browser
+                Code.innerHTML = code;
+                itemName.innerHTML = item;
+                itemQty.innerHTML = quantity;
+                Units.innerHTML = unit;
+                itemCost.innerHTML = sellingPrice;
+                subtotal.innerHTML = amount;
+
+                // Add invoice items to the lists
+                invoice.ItemCodes.push(code);
+                invoice.ItemNames.push(item);
+                invoice.Quantities.push(quantity);
+                invoice.ItemUnits.push(unit);
+                invoice.ItemSubTotal.push(amount);
+                
+                stocks[selectedItem]["quantity"] = inventoryStock;
+                invoice.TotalBillValue = twoDecimals(invoice.TotalBillValue + amount);
+                
+                document.getElementById("btn").disabled = true;
+                document.getElementById("submit").disabled = false;
+                document.getElementById("priceLevel").disabled = true;
+                document.getElementById("billValue").value = invoice.TotalBillValue;
+
+                //Transfer data to server 
+                stocksJSON = JSON.stringify(stocks);
+                document.getElementById("balanceStock").value = stocksJSON;
+
+                invoiceJSON = JSON.stringify(invoice);
+                document.getElementById("invoice").value = invoiceJSON;
+  
+                resetValues();
+                return true;
+            }
+        }
+
+        function selectItem() {
+            var selectItem = document.getElementById("selectItem").value;
+            document.getElementById("btn").disabled = false;
+            try {
+                for (item = 0; item <= countStocks; item++) {
+                    if (selectItem == stocks[item]["itemcode"]) {
+                        document.getElementById("sellingPrice").value = parseFloat(stocks[item]["sellingprice"]).toFixed(2);
+                        document.getElementById("InStock").value = stocks[item]["quantity"];
+                        document.getElementById("units").value = stocks[item]["units"];
+                        selectedItem = item;
+                    }
+                }
+            } catch (err) {
+        
+            } 
+        }
+
+        function resetValues() {
+            document.getElementById("sellingPrice").value = "";
+            document.getElementById("quantity").value = "";
+            document.getElementById("InStock").value = "";
+            document.getElementById.selectItem = 0;
+        }
+
+        function twoDecimals(number) {
+            number = number * 100;
+            number = Math.trunc(number);
+            return number/100;
+        }
+    </script>
+</body>
+</html>

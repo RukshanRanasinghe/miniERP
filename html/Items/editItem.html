@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./assets/htmlstyles.css" rel="stylesheet" />
+    <title>editItems</title>
+</head>
+<body>
+    <h3 class="heading">Edit Items</h3>
+    <h4 class="sub-heading">Stored Item List</h4>
+    <table class="table-style">
+        <tr><th>No</th><th>Code</th><th>Name</th><th>Description</th><th>Cost</th><th>Prize</th><th>Units</th><th>Supplier</th><th>VAT</th></tr>
+        <script type="text/JavaScript">
+            var itemRecs = "{{.}}";
+            var itemRec = JSON.parse(itemRecs);
+            var sizeOfRec = itemRec.length;
+            var itemSelected = false;
+            var itemRecordIDs = [];
+
+            for (recCount = 0; recCount < sizeOfRec; recCount++) {
+                if (itemRec[recCount]["status"] != "inactive") {
+                    itemRecordIDs.push(recCount);
+                    document.writeln("<tr><td>" +
+                        (recCount+1) + "</td><td>" +
+                        itemRec[recCount]["itemcode"] + "</td><td>" + 
+                        itemRec[recCount]["itemname"] + "</td><td>" +
+                        itemRec[recCount]["itemdescription"] + "</td><td>" +
+                        itemRec[recCount]["purchasedprice"] + "</td><td>" +
+                        itemRec[recCount]["sellingprice"] + "</td><td>" +
+                        itemRec[recCount]["units"] + "</td><td>" +
+                        itemRec[recCount]["supid"] + "</td><td>" +
+                        itemRec[recCount]["vatreg"] + "</td></tr>");
+                }
+            }
+        </script>
+    </table>
+    <br>
+    <table class="table-style">
+        <form name="itemID" enctype='application/json'>
+            <tr>
+                <td><label for="id">Select line no</label></td>
+                <td><input type="number" name="id" id="itemid" min="0" step="1" required></td>
+                <td><button type="button" onclick="selectedItem()">Select</button></td>
+            </tr>
+        </form>
+    </table>
+    <br>
+    <table class="table-style">
+        <form action="/confirmEditItem" enctype='application/json' method="POST">
+            <tr>
+                <td><label for="iName">Item Name</label></td>
+                <td><input type="text" id="itemName" name="ItemName" readonly required></td>
+                <td><label for="iDes">Description</label></td>
+                <td><input type="text" id="itemDes" name="ItemDescription" readonly required></td>
+            </tr>
+            <tr>
+                <td><label for="cost">Cost</label></td>
+                <td><input type="number" name="PurchasePrice" id="cost" min="0" step="0.01" required></td>
+                <td><label for="prize">Prize</label></td>
+                <td><input type="number" name="SellingPrice" id="prize" min="0" step="0.01" required></td>
+            </tr>
+            <tr>
+                <td><label for="cb"></label> Check to inactivate the item</td>
+                <td><input type="checkbox" name="inactivate" id="cb" value="true"></td>
+            </tr>
+            <tr>
+                <tr><td><input type="submit" onclick="return validateData()"></td></tr>
+            </tr>
+            <tr>
+                <td><input type="hidden" name="ItemCode" id="itemCode"></td>
+                <td><input type="hidden" name="SupName" id="supID"></td>
+                <td><input type="hidden" name="VATRegistered" id="VATReg"></td>
+                <td><input type="hidden" id="createdDate"></td>
+                <td><input type="hidden" name="organization" id="org"></td>
+                <td><input type="hidden" name="id" id="id"></td>
+                <td><input type="hidden" name="Units" id="units"></td>
+            </tr>
+        </form>
+    </table>
+    <script>
+        function selectedItem() {
+            itemSelected = true;
+            let recCount = document.getElementById("itemid").value-1;
+            if (itemRecordIDs.includes(recCount)) {
+                document.getElementById("createdDate").value = itemRec[recCount]["createdate"];
+                document.getElementById("itemName").value = itemRec[recCount]["itemname"];
+                document.getElementById("itemDes").value = itemRec[recCount]["itemdescription"];
+                document.getElementById("cost").value = itemRec[recCount]["purchasedprice"];
+                document.getElementById("prize").value = itemRec[recCount]["sellingprice"];
+                document.getElementById("itemCode").value = itemRec[recCount]["itemcode"];
+                document.getElementById("supID").value = itemRec[recCount]["supid"];
+                document.getElementById("VATReg").value = itemRec[recCount]["vatreg"];
+                document.getElementById("units").value = itemRec[recCount]["units"];
+                document.getElementById("org").value =  itemRec[recCount]["supid"];
+                document.getElementById("id").value = itemRec[recCount]["id"];
+            } else {
+                alert("Invalid raw number");
+            }
+        }
+        
+        function validateData() {
+            if (!itemSelected) {
+                alert("Please select an item")
+                return false
+            }
+            return true
+        }
+    </script>
+</body>
+</html>

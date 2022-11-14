@@ -1,0 +1,90 @@
+.heading {
+    color:black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    padding-bottom: 40px;
+}
+
+.sub-heading {
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    padding-bottom: 10px;
+}
+
+.form-style {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+.table-style th {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align:left;
+}
+
+.table-style td {
+    font-size: 12px;
+    font-family:Arial, Helvetica, sans-serif;
+    height: 4px;
+    text-align:left;
+    vertical-align: middle;
+}
+
+.addSupplier {
+    width: 75%;
+}
+
+.lockInput {
+    border: none; text-align: center;
+    vertical-align: middle;
+    width: 100px;
+}
+
+.userInput {
+    border: none;
+    border-bottom: 1px solid black;
+    width: 90px;
+}
+
+.labelSty {
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+.paragraph {
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 4px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.table-with-border {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    width: 450px;
+}
+
+.table-with-border th {
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid rgb(81, 73, 73);
+}
+
+.table-with-border td {
+    text-align: left;
+    vertical-align: middle;
+    border: 1px solid rgb(81, 73, 73);
+}
+
+.table-with-border td:nth-child(4) {
+    text-align: right;
+    vertical-align: middle;
+    border: 1px solid rgb(81, 73, 73);
+}
+

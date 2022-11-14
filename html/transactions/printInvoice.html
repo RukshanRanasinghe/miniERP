@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./assets/htmlstyles.css" rel="stylesheet" />
+    <script type="text/JavaScript" src="../assets/methods.js"></script>
+    <title>Confirm</title>
+</head>
+
+<body>
+    <h3 class="heading">Invoice</h3>
+    <table class="table-style">
+        <tr>
+            <th>Invoice Date:</th><td id="date"></td>
+        </tr>
+        <tr>
+            <th>Invoice Number:</th><td id="invNo"></td>
+        </tr>
+    </table>
+    <br>
+    <table class="table-with-border" id="receipt">
+        <tr>
+            <th>Item Code</th><th>Description</th><th>Quantity</th><th>Unit Price</th><th>Total</th>
+        </tr>
+        <tr>
+            <td colspan="4" style="font-weight: bold;">Total Bill Value Rs.</td><td id="totVal" style="font-weight: bold;"></td>
+        </tr>
+    </table>
+    <script type="text/JavaScript">
+        var invoiceJSON = "{{.}}";
+        var invoice = JSON.parse(invoiceJSON);
+        document.getElementById("date").innerHTML = invoice["InvoiceDate"];
+        document.getElementById("invNo").innerHTML = invoice["InvoiceNumber"];
+        
+        var bill = document.getElementById("receipt");
+        var rows = invoice["ItemCodes"].length;
+       
+        for (let index = 0; index < rows; index ++) {
+            var raw = bill.insertRow(1+index);
+            var itemCode = raw.insertCell(0);
+            var description = raw.insertCell(1);
+            var quantity = raw.insertCell(2);
+            var unitPrice = raw.insertCell(3);
+            var total = raw.insertCell(4);
+
+            itemCode.innerHTML = invoice["ItemCodes"][index];
+            description.innerHTML = invoice["ItemNames"][index];
+            quantity.innerHTML = invoice["Quantities"][index];
+            unitPrice.innerHTML = invoice["ItemSubTotal"][index]/invoice["Quantities"][index];
+            total.innerHTML = invoice["ItemSubTotal"][index];
+        }
+        document.getElementById("totVal").innerHTML = invoice["TotalBillValue"];
+    </script>
+    <br>
+    <div id="btn">
+        <table>
+            <tr>
+                <td><button onclick="printPage()" id="btnPrint">Print</button></td>
+                <td><form action="/invoice" enctype='application/json'><input type="submit" value="Back" id="btnBack"></form></td>
+            </tr>
+        </table>
+        </div>
+    <script>
+        function printPage() {
+            var displayBtn = document.getElementById("btn");
+            displayBtn.style.display = "none";
+            window.print();
+            displayBtn.style.display = "block";
+        }
+    </script>
+</body>
+
+</html>

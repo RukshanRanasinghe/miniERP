@@ -1,0 +1,20 @@
+package config
+
+import (
+	"log"
+	"net/http"
+)
+
+func Report(err error, message string) {
+	if err != nil {
+		log.Fatal(message, err)
+	}
+}
+
+func PostError(w http.ResponseWriter, r *http.Request) string {
+	if r.Method != "POST" {
+		http.Redirect(w, r, "./grocery", http.StatusSeeOther)
+		return "Error posting the record"
+	}
+	return "nil"
+}
